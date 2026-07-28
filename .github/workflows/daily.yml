@@ -1,0 +1,31 @@
+name: 每日晚间新闻自动收集
+
+on:
+  schedule:
+    # 北京时间 21:00 对应 UTC 时间 13:00
+    - cron: '0 13 * * *'
+  # 加一个手动触发按钮，方便你测试
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 运行新闻生成脚本
+        run: python collect_news.py
+
+      - name: 提交并推送生成的日报到仓库
+        run: |
+          git config user.name "zaoa98483-del"          # 这里改成你的用户名
+          git config user.email "zaoa98483@gmail.com"   # 这里改成你的邮箱
+          git add .
+          git diff --staged --quiet || git commit -m "自动更新：$(date +'%Y-%m-%d') 新闻日报"
+          git push
