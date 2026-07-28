@@ -26,6 +26,7 @@ jobs:
         run: |
           git config user.name "zaoa98483-del"          # 这里改成你的用户名
           git config user.email "zaoa98483@gmail.com"   # 这里改成你的邮箱
-          git add .
-          git diff --staged --quiet || git commit -m "自动更新：$(date +'%Y-%m-%d') 新闻日报"
-          git push
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/zioa98483-del/daily-news.git
+    git add .
+    git diff --staged --quiet || git commit -m "自动更新：$(date +'%Y-%m-%d') 新闻日报"
+    git push
